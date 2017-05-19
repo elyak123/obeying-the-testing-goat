@@ -4,7 +4,7 @@ from selenium.common.exceptions     import WebDriverException
 from django.test import LiveServerTestCase
 import unittest
 import time
-MAX_WAIT = 10
+MAX_WAIT = 4
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -32,7 +32,6 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         #Se notices the page title and header mention to-do lists
-
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
