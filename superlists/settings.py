@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'superlists.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
     }
 }
 
@@ -119,4 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+<<<<<<< HEAD
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
+=======
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
+>>>>>>> f020a92c9bf2a7686ad85be231c5c94832b43da9

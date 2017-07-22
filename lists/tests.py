@@ -14,11 +14,10 @@ class NewListTest(TestCase):
 
     def test_can_save_a_POST_request(self):
         self.client.post('/lists/new', data={'item_text': 'A new list item'})
-
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'A new list item')
-    
+
     def test_redirects_after_POST(self):
         response = self.client.post('/lists/new', data={'item_text': 'A new list item'})
         new_list = List.objects.first()
@@ -54,6 +53,7 @@ class ListViewTest(TestCase):
         response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
+<<<<<<< HEAD
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
         item1 = Item.objects.create(text='itemey 1', list=correct_list)
@@ -69,13 +69,34 @@ class ListViewTest(TestCase):
         self.assertNotContains(response, 'other Item 1')
         self.assertNotContains(response, 'other Item 2')
 
+=======
+>>>>>>> f020a92c9bf2a7686ad85be231c5c94832b43da9
     def test_passes_correct_list_to_template(self):
         other_list   = List.objects.create()
         correct_list = List.objects.create()
         response     = self.client.get(f'/lists/{correct_list.id}/')
         self.assertEqual(response.context['list'], correct_list)
 
+<<<<<<< HEAD
 class ItemModelTest(TestCase):
+=======
+    def test_displays_only_items_for_that_list(self):
+        correct_list = List.objects.create()
+        item1 = Item.objects.create(text='itemey 1', list=correct_list)
+        item2 = Item.objects.create(text='itemey 2', list=correct_list)
+        other_list = List.objects.create()
+        Item.objects.create(text='Other Item 1', list=other_list)
+        Item.objects.create(text='Other Item 2', list=other_list)
+        item1.save()
+        item2.save()
+        response = self.client.get(f'/lists/{correct_list.id}/')
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
+        self.assertNotContains(response, 'Other Item 1')
+        self.assertNotContains(response, 'Other Item 2')
+
+class ListAndItemModelsTest(TestCase):
+>>>>>>> f020a92c9bf2a7686ad85be231c5c94832b43da9
 
     def test_saving_and_retreaving_items(self):
         list_ = List()
@@ -103,4 +124,7 @@ class ItemModelTest(TestCase):
         self.assertEqual(first_item.list, list_)
         self.assertEqual(second_saved_item.text, 'Item the second')
         self.assertEqual(second_saved_item.list, list_)
+<<<<<<< HEAD
 
+=======
+>>>>>>> f020a92c9bf2a7686ad85be231c5c94832b43da9
