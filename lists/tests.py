@@ -5,6 +5,7 @@ from lists.models             import Item, List
 from django.http              import HttpRequest
 
 class HomePageTest(TestCase):
+
     def test_uses_home_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
@@ -63,6 +64,7 @@ class ListViewTest(TestCase):
         self.assertContains(response, 'itemey 2')
         self.assertNotContains(response, 'Other Item 1')
         self.assertNotContains(response, 'Other Item 2')
+
 class NewListTest(TestCase):
 
     def test_can_save_a_POST_request_to_existing_list(self):

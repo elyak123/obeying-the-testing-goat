@@ -6,6 +6,7 @@ import unittest
 import time
 MAX_WAIT = 4
 class NewVisitorTest(StaticLiveServerTestCase):
+    
     def setUp(self):
         self.browser = webdriver.Firefox()
 
