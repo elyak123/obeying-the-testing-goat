@@ -1,5 +1,5 @@
 from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run
+from fabric.api           import env, local, run, sudo
 import random
 
 REPO_URL = 'https://github.com/elyak123/obeying-the-testing-goat.git'
@@ -31,7 +31,7 @@ def _update_settings(source_folder, site_name):
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
 def _update_virtualenv(source_folder):
-    virtualenv_folder = source_folder + '/.../virtualenv'
+    virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip'):
         run(f'python3.6 -m venv {virtualenv_folder}')
     run(f'{virtualenv_folder}/bin/pip install -r {source_folder}/requirements.txt')
@@ -49,9 +49,28 @@ def _update_database(source_folder):
         '&& ../virtualenv/bin/python manage.py migrate --noinput'
     )
 
+def _provisioning():
+    sudo('apt update && apt upgrade')
+    nginx = run('which nginx')
+    python36 = run('which python3.6')
+    if not nginx:
+        sudo('apt install nginx && systemctl start nginx')
+    if not python36:
+        sudo('add-apt-repository ppa:fkrull/deadsnakes')
+        sudo('apt update')
+        sudo('apt install python3.6 python3.6-venv')
+
+def _webserver_configuration(site_name, source_folder):
+    nginx_config = run(f'sed "s/SITENAME/{site_name}/g"' 
+        f'{source_folder}/deploy_tools/gunicorn-systemd.template.service'
+    )
+    sudo(nginx_config + f'> /etc/systemd/system/gunicorn-{site_name}.service')
+
 def deploy():
     site_folder = f'/home/{env.user}/sites/{env.host}'
     source_folder = site_folder + '/source'
+    _provisioning()
+    _webserver_configuration(env.host, source_folder)
     _create_directory_structure_if_necessary(site_folder)
     _get_lastest_source(source_folder)
     _update_virtualenv(source_folder)
