@@ -51,28 +51,53 @@ def _update_database(source_folder):
 
 def _provisioning():
     sudo('apt update && apt upgrade')
-    nginx = run('which nginx')
-    python36 = run('which python3.6')
-    if not nginx:
+    try:
+        nginx = run('which nginx')
+    except:
         sudo('apt install nginx && systemctl start nginx')
-    if not python36:
+    try:
+        python36 = run('which python3.6')
+    except:
         sudo('add-apt-repository ppa:fkrull/deadsnakes')
         sudo('apt update')
         sudo('apt install python3.6 python3.6-venv')
 
+
 def _webserver_configuration(site_name, source_folder):
-    nginx_config = run(f'sed "s/SITENAME/{site_name}/g"' 
-        f'{source_folder}/deploy_tools/gunicorn-systemd.template.service'
-    )
-    sudo(nginx_config + f'> /etc/systemd/system/gunicorn-{site_name}.service')
+    if exists('/etc/nginx/sites-enabled/default'):
+        sudo('rm -r /etc/nginx/sites-enabled/default')
+    if not exists(f'/etc/nginx/sites-available/{site_name}'):
+        run(f'sed "s/SITENAME/{site_name}/g" '
+            f'{source_folder}/deploy_tools/nginx.template.conf'
+            f'| sudo tee /etc/nginx/sites-available/{site_name}',
+            warn_only=True
+        )
+        sudo(f'ln -s /etc/nginx/sites-available/{site_name} /etc/nginx/sites-enabled/{site_name}')
+
+    if not exists(f'/etc/systemd/system/gunicorn-{site_name}.service'):
+        run(f'sed -e "s/SITENAME/{site_name}/g" -e s/SERVERUSER/ubuntu/g -e s/MYAPP/superlists/g ' 
+            f'{source_folder}/deploy_tools/gunicorn-systemd.template.service '
+            f'| sudo tee /etc/systemd/system/gunicorn-{site_name}.service',
+            warn_only=True
+        )
+
+def _restart_webserver(site_name):
+    sudo('systemctl daemon-reload')
+    try:
+        sudo('systemctl reload nginx')
+    except:
+        sudo('systemctl start nginx')
+    sudo(f'systemctl enable gunicorn-{site_name}')
+    sudo(f'sudo systemctl start gunicorn-{site_name}')
 
 def deploy():
     site_folder = f'/home/{env.user}/sites/{env.host}'
     source_folder = site_folder + '/source'
     _provisioning()
-    _webserver_configuration(env.host, source_folder)
     _create_directory_structure_if_necessary(site_folder)
     _get_lastest_source(source_folder)
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
+    _webserver_configuration(env.host, source_folder)
+    _restart_webserver(env.host)

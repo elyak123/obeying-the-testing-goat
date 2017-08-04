@@ -5,7 +5,7 @@ Description=Gunicorn server for SITENAME
 Restart=on-failure
 User=SERVERUSER
 WorkingDirectory=/home/SERVERUSER/sites/SITENAME/source
-ExecStart=/home/SERVERUSER/sites/SITENAME/venv/bin/gunicorn --bind unix:/tmp/SITENAME.socket MYAPP.wsgi:application
+ExecStart=/home/SERVERUSER/sites/SITENAME/virtualenv/bin/gunicorn --bind unix:/tmp/SITENAME.socket MYAPP.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
