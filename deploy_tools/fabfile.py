@@ -23,7 +23,7 @@ def _update_settings(source_folder, site_name):
         'ALLOWED_HOSTS = .+$', 
         f'ALLOWED_HOSTS = ["{site_name}", "127.0.0.1",]'
     )
-    sed('SECRET_KEY = .+$', '#SECRET_KEY = ""')
+    sed(settings_path, 'SECRET_KEY = .+$', '#SECRET_KEY = ""')
     secret_key_file = source_folder + '/superlists/secret_key.py'
     if not exists(secret_key_file):
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
