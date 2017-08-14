@@ -106,3 +106,10 @@ class ListViewTest(TestCase):
         self.assertEqual(count_items, 0)
         self.assertEqual(response.status_code, 200)
 
+    def test_displays_item_form(self):
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}/')
+        self.assertIsInstance(response.context.get('form'), ItemForm)
+        self.assertContains(response, 'name="text"')
+
+
