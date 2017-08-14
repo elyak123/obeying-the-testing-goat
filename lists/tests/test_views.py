@@ -124,5 +124,5 @@ class ListViewTest(TestCase):
         self.assertContains(response, 'name="text"')
 
     def test_for_invalid_input_passes_form_to_template(self):
-        response = self.client.post('/list/new', data={'text': ''})
+        response = self.post_invalid_input()
         self.assertIsInstance(response.context.get('form'), ItemForm)

@@ -16,6 +16,7 @@ class NewvisitorTest(FunctionalTest):
         self.assertIn('To-Do', header_text)
         #She is invited to enter a to-do item right away
         inputbox= self.get_input_box()
+        #import pdb; pdb.set_trace()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
