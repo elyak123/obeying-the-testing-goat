@@ -11,7 +11,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         if staging_server:
             self.live_server_url = 'http://' + staging_server
 
-    def get_input_box(self):
+    def get_item_input_box(self):
         return self.browser.find_element_by_id('id_text')
 
     def tearDown(self):

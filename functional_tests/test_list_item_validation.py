@@ -9,7 +9,7 @@ class ItemValidationTest(FunctionalTest):
         #Edith goes to the home and accidentally tries to submit
         #an empty list item. She hits Enter on the empty input box
         self.browser.get(self.live_server_url)
-        input_box = self.get_input_box()
+        input_box = self.get_item_input_box()
         input_box.send_keys(Keys.ENTER)
 
         #The home page refreshes, and there is an error message saying
