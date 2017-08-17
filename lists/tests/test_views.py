@@ -2,7 +2,6 @@ from unittest                 import skip
 from django.core.urlresolvers import resolve
 from django.utils.html        import escape
 from django.test              import TestCase
-from lists.views              import home_page
 from lists.forms              import ItemForm, EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR, ExistingListItemForm
 from lists.models             import Item, List
 from django.http              import HttpRequest
