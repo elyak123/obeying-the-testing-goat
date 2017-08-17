@@ -26,6 +26,7 @@ class ItemValidationTest(FunctionalTest):
         #She receives a similar warning on the list page
         self.wait_for(lambda:self.browser.find_element_by_css_selector('#id_text:invalid'))
         #And she can correct it by filling some text in
+        input_box = self.get_item_input_box()
         input_box.send_keys('Make Tea')
         input_box.send_keys(Keys.ENTER)
         input_box = self.get_item_input_box()

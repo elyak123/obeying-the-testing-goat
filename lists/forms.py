@@ -2,8 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from lists.models import Item
 
-EMPTY_ITEM_ERROR = "You can't have an empty list item"
-DUPLICATE_ITEM_ERROR = "You've already dot this in your list"
+EMPTY_ITEM_ERROR     = "You can't have an empty list item"
+DUPLICATE_ITEM_ERROR = "You've already got this in your list"
 
 class ItemForm(forms.ModelForm):
     
@@ -29,7 +29,11 @@ class ItemForm(forms.ModelForm):
 class ExistingListItemForm(ItemForm):
     def __init__(self, for_list, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.instance.list = for_list
     
+    def save(self):
+        return super(ItemForm, self).save()
+
     def validate_unique(self):
         try:
             self.instance.validate_unique()
