@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http      import HttpResponse
 from django.shortcuts import render, redirect
 from lists.models     import Item, List
-from lists.forms      import ItemForm
+from lists.forms      import ItemForm, ExistingListItemForm
 # Create your views here.
 def home_page(request):
     return render(request, 'home.html', {'form': ItemForm()})
