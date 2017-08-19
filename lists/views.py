@@ -19,10 +19,6 @@ class ViewAndAddToList(DetailView, CreateView):
         self.object = self.get_object()
         return self.form_class(for_list=self.object, data=self.request.POST)
 
-    def get_success_url(self):
-        obj = self.get_object()
-        return obj.get_absolute_url()
-
 class NewListView(CreateView):
     form_class = ItemForm
     template_name = 'home.html'
